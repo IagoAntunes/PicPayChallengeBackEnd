@@ -26,12 +26,31 @@ data class WalletEntity(
     @Column(name = "password")
     val password:String,
     @Column(name = "balance")
-    val balance:BigDecimal = BigDecimal.ZERO,
+    var balance:BigDecimal = BigDecimal.ZERO,
 
     @ManyToOne
     @JoinColumn(name = "wallet_type_id")
     val walletType: WalletType
 ){
+    fun isTransferAllowedForWalletType(): Boolean {
+        return walletType.description == WalletTypeEnum.USER.get().description
+    }
+
+    fun isEqualOrGreatherThen(value: BigDecimal): Boolean {
+        return if(balance.compareTo(value) == -1){
+            false
+        }else{
+            true
+        }
+    }
+
+    fun debit(value: BigDecimal) {
+        this.balance = this.balance.subtract(value)
+    }
+
+    fun credit(value: BigDecimal) {
+        this.balance = this.balance.add(value)
+    }
 
     constructor(fullName: String, cpfCnpj: String, email: String, password: String, walletType: WalletType)
             : this(0, fullName, cpfCnpj, email, password, BigDecimal.ZERO, walletType)
