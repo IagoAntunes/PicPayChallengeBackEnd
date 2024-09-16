@@ -1,8 +1,9 @@
 package iago.af.picpay.controller
 
-import iago.af.picpay.dto.request.CreateWalletDto
+import iago.af.picpay.dto.request.CreateWalletRequestDto
 import iago.af.picpay.entity.WalletEntity
 import iago.af.picpay.service.IWalletService
+import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -20,7 +21,7 @@ class WalletController {
 
     @PostMapping("/wallets")
     fun createWallet(
-        @RequestBody request:CreateWalletDto
+        @Valid @RequestBody request:CreateWalletRequestDto
     ) :ResponseEntity<WalletEntity>{
         val result = walletService.createWallet(request)
 
